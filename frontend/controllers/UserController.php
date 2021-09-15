@@ -6,6 +6,7 @@ use common\models\LoginForm;
 use frontend\models\CompanySignupForm;
 use frontend\models\SignupForm;
 use Yii;
+use yii\web\UploadedFile;
 
 class UserController extends \yii\web\Controller
 {
@@ -19,8 +20,11 @@ class UserController extends \yii\web\Controller
         $model = new CompanySignupForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if ($model->upload()) {
+                Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+                return $this->goHome();
+            }
         }
 
         return $this->render('registration/companyreg',['model' => $model]
@@ -32,8 +36,11 @@ class UserController extends \yii\web\Controller
         $model = new SignupForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if ($model->upload()) {
+                Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+                return $this->goHome();
+            }
         }
 
         return $this->render('registration/candidatereg',['model' => $model]

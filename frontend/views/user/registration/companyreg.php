@@ -52,11 +52,10 @@ $data = \yii\helpers\ArrayHelper::map(City::find()->asArray()->all(), 'id', 'nam
                         ['prompt'=>'Select City']
                     );?>
 
-
                     <?= $form->field($model, 'image')->fileInput();?>
 
                     <div class="form-group">
-                        <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                        <button class="btn btn-success" type="submit">Registration</button>
                     </div>
 
                     <?php ActiveForm::end(); ?>

@@ -22,6 +22,7 @@ class SignupForm extends Model
     public $image;
     public $city;
     public $rememberMe = true;
+    public $user_candidate;
 
 
     /**
@@ -56,7 +57,7 @@ class SignupForm extends Model
             ['age', 'required'],
             ['age', 'number'],
 
-            ['image', 'string', 'max' => 255],
+            ['image', 'image', 'skipOnEmpty' => true],
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
@@ -70,11 +71,9 @@ class SignupForm extends Model
      */
     public function signup()
     {
-
         if (!$this->validate()) {
             return null;
         }
-
 
         $user = new User();
         $user->username = $this->username;
@@ -85,21 +84,26 @@ class SignupForm extends Model
         $user->role = User::ROLE_CANDIDATE;
         $user->save();
 
-
         $candidate= new Candidate();
         $candidate->age = $this->age;
         $candidate->profession = $this->profession;
         $candidate->location = $this->location;
         $candidate->city_id = $this->city;
         $candidate->user_id = $user->id;
-
-        if (!is_null($this->image) && !empty($this->image)) {
-            $random = Yii::$app->security->generateRandomString(12).$this->image->extension;
-            $this->image->saveAs('@forntend/web/uploads/users' .$random);
-            $candidate->image = $random;
-        }
+        $this->user_candidate = $candidate;
 
         return $candidate->save() && Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
+    }
+
+    public function upload()
+    {
+        if (!is_null($this->image) && !empty($this->image)) {
+            $random = Yii::$app->security->generateRandomString(12).'.'.$this->image->extension;
+            $this->image->saveAs('@frontend/web/uploads/users/' .$random);
+            $this->user_candidate->image = $random;
+            $this->user_candidate->save();
+        }
+        return true;
     }
 
     /**

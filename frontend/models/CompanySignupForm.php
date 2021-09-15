@@ -7,6 +7,7 @@ use Yii;
 use yii\base\Model;
 use common\models\User;
 use common\models\Company;
+use yii\web\UploadedFile;
 
 /**
  * Signup form
@@ -22,6 +23,7 @@ class CompanySignupForm extends Model
     public $companyname;
     public $tagline;
     public $rememberMe = true;
+    public $user_company;
 
     /**
      * {@inheritdoc}
@@ -48,11 +50,10 @@ class CompanySignupForm extends Model
             ['location', 'required'],
             ['location', 'string', 'max' => 255],
 
-            ['image', 'string', 'max' => 255],
+            ['image', 'image', 'skipOnEmpty' => true],
 
             ['companyname', 'required'],
             ['companyname', 'string', 'max' => 255],
-
 
             ['tagline', 'required'],
             ['tagline', 'string', 'max' => 255],
@@ -73,20 +74,36 @@ class CompanySignupForm extends Model
             return null;
         }
 
+        $user = new User();
+        $company = new Company();
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->setPassword($this->password);
+        $user->generateAuthKey();
+        $user->generateEmailVerificationToken();
+        $user->role = User::ROLE_COMPANY;
+        $user->save();
+
         $company->companyname = $this->companyname;
         $company->tagline = $this->tagline;
         $company->location = $this->location;
         $company->city_id = $this->city;
         $company->user_id = $user->id;
-        if (!is_null($this->image) && !empty($this->image)) {
-            $random = Yii::$app->security->generateRandomString(12).$this->image->extension;
-            $this->image->saveAs('@forntend/web/uploads/users' .$random);
-            $company->image = $random;
-        }
+        $this->user_company = $company;
 
         return $company->save() && Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
     }
 
+    public function upload()
+    {
+        if (!is_null($this->image) && !empty($this->image)) {
+            $random = Yii::$app->security->generateRandomString(12).'.'.$this->image->extension;
+            $this->image->saveAs('@frontend/web/uploads/users/' .$random);
+            $this->user_company->image = $random;
+            $this->user_company->save();
+        }
+        return true;
+    }
     /**
      * Sends confirmation email to user
      * @param User $user user model to with email should be send
