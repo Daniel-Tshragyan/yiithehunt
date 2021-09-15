@@ -14,6 +14,9 @@ use yii\filters\VerbFilter;
  */
 class CityController extends AdminController
 {
+    /**
+     * @inheritDoc
+     */
 
     /**
      * Lists all City models.
