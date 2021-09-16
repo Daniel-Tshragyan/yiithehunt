@@ -92,7 +92,19 @@ class PostController extends AdminController
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if ($model->upload() && $model->save()) {
+                foreach ($model->categoriesPosts as $item) {
+                    $item->delete();
+                }
+                foreach ($model->categoryIds as $item) {
+                    $model1 = new CategoryPost();
+                    $model1->category_id = $item;
+                    $model1->post_id = $model->id;
+                    $model1->save();
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
