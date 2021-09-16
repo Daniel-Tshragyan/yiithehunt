@@ -42,7 +42,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'post/<id:\d+>' => 'post/show',
+                'post/show/<id:\d+>' => 'post/show',
             ],
         ],
 

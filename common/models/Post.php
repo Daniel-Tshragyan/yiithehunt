@@ -4,7 +4,11 @@ namespace common\models;
 
 use Yii;
 use common\models\CategoryPost;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 
 
 /**
@@ -21,6 +25,16 @@ use yii\helpers\ArrayHelper;
 class Post extends \yii\db\ActiveRecord
 {
 
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
+
+    const CONTENT_SIZE = 15;
+
     public $categoryIds = [];
     /**
      * {@inheritdoc}
@@ -36,7 +50,6 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'required'],
             [['title'], 'required'],
             [['content'], 'required'],
             [['image'], 'required'],
@@ -56,7 +69,6 @@ class Post extends \yii\db\ActiveRecord
             'image' => 'Image',
             'title' => 'Title',
             'content' => 'Content',
-            'created_at' => 'Created At',
             'categoryIds' => 'Categories'
         ];
     }
@@ -100,4 +112,25 @@ class Post extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    public function getImgUrl()
+    {
+        return Yii::getAlias('@web').'/images/editor/'.$this->image;
+    }
+
+    public function shortContent()
+    {
+        return StringHelper::truncate($this->content, self::CONTENT_SIZE);
+    }
+
+    public function getViewUrl()
+    {
+        return Url::to(['post/show', 'id' => $this->id]);
+    }
+
+    public function getDate()
+    {
+        return date('Y-m-d', $this->created_at);
+    }
+
 }

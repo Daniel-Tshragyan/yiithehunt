@@ -7,7 +7,7 @@ use common\models\Post;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 
-class PostWidget extends Widget
+class RelatedPostsWidget extends Widget
 {
     public $post;
     public function init()
@@ -26,11 +26,11 @@ class PostWidget extends Widget
 
         }
 
-        $posts = Post::find(['<>', 'id', $this->post->id])->innerJoinWith([
+        $posts = Post::find()->innerJoinWith([
             'categories' => function ($query) use ($newData) {
                 $query->andWhere(['in', 'categories.id', $newData]);
             },
-        ])->orderBy('RAND()')->limit(3)->all();
+        ])->where(['<>', 'posts.id', $this->post->id])->orderBy('RAND()')->limit(3)->all();
         
 
         return $this->render('relatedPosts', ['posts' => $posts]);

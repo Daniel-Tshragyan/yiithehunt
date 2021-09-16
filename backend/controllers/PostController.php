@@ -59,15 +59,14 @@ class PostController extends AdminController
         $model = new Post();
 
         if ($this->request->isPost) {
-            $model->created_at = date('Y-m-d H:i:s');
             if ($model->load($this->request->post())) {
                 $model->image = UploadedFile::getInstance($model, 'image');
                 if ($model->upload() && $model->save()) {
                     foreach ($model->categoryIds as $item) {
-                        $model1 = new CategoryPost();
-                        $model1->category_id = $item;
-                        $model1->post_id = $model->id;
-                        $model1->save();
+                        $categoryPost = new CategoryPost();
+                        $categoryPost->category_id = $item;
+                        $categoryPost->post_id = $model->id;
+                        $categoryPost->save();
                     }
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
@@ -94,16 +93,17 @@ class PostController extends AdminController
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->touch('updated_at');
             $model->image = UploadedFile::getInstance($model, 'image');
             if ($model->upload() && $model->save()) {
                 foreach ($model->categoriesPosts as $item) {
                     $item->delete();
                 }
                 foreach ($model->categoryIds as $item) {
-                    $model1 = new CategoryPost();
-                    $model1->category_id = $item;
-                    $model1->post_id = $model->id;
-                    $model1->save();
+                    $categoryPost = new CategoryPost();
+                    $categoryPost->category_id = $item;
+                    $categoryPost->post_id = $model->id;
+                    $categoryPost->save();
                 }
             }
             return $this->redirect(['view', 'id' => $model->id]);
@@ -138,8 +138,8 @@ class PostController extends AdminController
                 'maxWidth' => 800,
                 'maxHeight' => 800,
                 'useHash' => true,
-                'url' => '@web/contents/',
-                'path' => '@frontend/web/contents/',
+                'url' => '@web/images/editor/',
+                'path' => '@frontend/web/images/editor/',
             ],
             'upload-images' => [
                 'class' => 'bajadev\ckeditor\actions\UploadAction',
@@ -147,8 +147,8 @@ class PostController extends AdminController
                 'maxWidth' => 800,
                 'maxHeight' => 800,
                 'useHash' => true,
-                'url' => '@web/contents/',
-                'path' => '@frontend/web/contents/',
+                'url' => '@web/images/editor/',
+                'path' => '@frontend/web/images/editor/',
             ],
         ];
     }

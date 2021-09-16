@@ -1,13 +1,23 @@
 <?php
 /* @var $this yii\web\View */
 
-use frontend\components\PostWidget;
+use frontend\components\RelatedPostsWidget;
+use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\helpers\StringHelper;
+use yii\widgets\ListView;
 
 $this->title = 'Posts';
+
+$dataProvider = new ActiveDataProvider([
+    'query' => $posts,
+    'pagination' => [
+        'pageSize' => 4,
+    ],
+]);
+
 
 
 ?>
@@ -15,21 +25,13 @@ $this->title = 'Posts';
 <div class="container">
 
     <div class="row">
-        <div class="col col-lg-9 d-flex justify-content-between flex-wrap">
-            <?php foreach($models as $model):?>
-                <div class="col col-lg-4">
-                    <a href="<?=Url::toRoute(['post/'.$model->id])?>" style="width:100%">
-                        <?=Html::img(Yii::getAlias('@web').'/images/editor/'.$model->image ,['width' => '100%']) ?>
-                        <small><?= $model->created_at ?></small>
-                        <h6><?= $model->title ?></h6>
-                        <div>
-                            <?= StringHelper::truncate($model->content,15) ?>
-                        </div>
-                    </a>
-
-                </div>
-            <?php endforeach;?>
-
+        <div class="col col-lg-9 d-flex justify-content-between flex-wrap mainPosts">
+            <?php
+                echo ListView::widget([
+                    'dataProvider' => $dataProvider,
+                    'itemView' => '_post',
+                ]);
+            ?>
         </div>
         <div class="col col-lg-3">
             <ul>
@@ -53,6 +55,5 @@ $this->title = 'Posts';
 </div>
 
 
-<?= LinkPager::widget(['pagination' => $pages])?>
 
 

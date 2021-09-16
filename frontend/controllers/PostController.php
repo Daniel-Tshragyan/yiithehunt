@@ -4,14 +4,15 @@ namespace frontend\controllers;
 use common\models\Post;
 use common\models\Category;
 use yii\data\Pagination;
+use yii\web\NotFoundHttpException;
 
 class PostController extends \yii\web\Controller
 {
-    public function actionIndex()
+    public function actionIndex($category = null)
     {
 
-        if (isset($this->request->get()['category'])) {
-            $category = Category::findOne(['title' => $this->request->get()['category']]);
+        if (!is_null($category)) {
+            $category = Category::findOne(['title' => $category]);
             $posts = $category->getPosts();
         } else {
             $posts = Post::find();
@@ -19,25 +20,23 @@ class PostController extends \yii\web\Controller
 
 
         $categories = Category::find()->all();
-        $pages = new Pagination(['totalCount' => $posts->count(), 'defaultPageSize' => 5]);
-        $models = $posts->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
 
         return $this->render('index', [
-            'models' => $models,
-            'pages' => $pages,
+            'posts' => $posts,
             'categories' => $categories,
         ]);
     }
-    
+
+
     public function actionShow($id)
     {
-        $post = Post::findOne(['id' => $id]);
-        return $this->render('show',[
-            'post' => $post,
-        ]);
-        
+        if (($model = Post::findOne(['id' => $id])) !== null) {
+            return $this->render('show',[
+                'post' => $model,
+            ]);
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
 }

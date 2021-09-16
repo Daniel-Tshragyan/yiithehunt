@@ -103,7 +103,7 @@ class CompanySignupForm extends Model
                 $this->image->saveAs($path .'/'.$random);
             }
             $this->user_company->image = $random;
-            $this->user_company->save();die;
+            $this->user_company->save();
         }
         return true;
     }
