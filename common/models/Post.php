@@ -89,9 +89,13 @@ class Post extends \yii\db\ActiveRecord
         if (!is_null($this->image) && !empty($this->image)) {
             $random = Yii::$app->security->generateRandomString(12).'.'.$this->image->extension;
             $path = Yii::getAlias('@frontend') . "/web/images/editor";
+
             if (\yii\helpers\FileHelper::createDirectory($path, 0775, true)) {
-                $this->image->saveAs($path .$random);
+                $this->image->saveAs($path .'/'.$random);
             }
+
+
+
             $this->image = $random;
         }
         return true;

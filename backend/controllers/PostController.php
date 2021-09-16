@@ -90,6 +90,7 @@ class PostController extends AdminController
      */
     public function actionUpdate($id)
     {
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {

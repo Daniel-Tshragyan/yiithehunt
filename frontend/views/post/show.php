@@ -4,6 +4,8 @@
 use frontend\components\PostWidget;
 use yii\helpers\Html;
 
+$this->title = $post->id
+
 ?>
 
     <?=Html::img(Yii::getAlias('@web').'/images/editor/'.$post->image ,['width' => '100%']) ?>

@@ -23,15 +23,15 @@ class PostWidget extends Widget
             
         foreach ($this->post->categories as $item) {
             $newData[] = $item->id;
+
         }
 
-        
-        $posts = Post::find()->innerJoinWith([
+        $posts = Post::find(['<>', 'id', $this->post->id])->innerJoinWith([
             'categories' => function ($query) use ($newData) {
                 $query->andWhere(['in', 'categories.id', $newData]);
             },
         ])->orderBy('RAND()')->limit(3)->all();
-
+        
 
         return $this->render('relatedPosts', ['posts' => $posts]);
     }

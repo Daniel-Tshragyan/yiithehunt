@@ -7,6 +7,8 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\helpers\StringHelper;
 
+$this->title = 'Posts';
+
 
 ?>
 
