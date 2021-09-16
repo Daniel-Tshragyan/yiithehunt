@@ -82,6 +82,9 @@ AppAsset::register($this);
                     </div>
                     <div class="collapse navbar-collapse" id="main-navbar">
                         <ul class="navbar-nav mr-auto w-100 justify-content-end">
+                            <li class="nav-item">
+                                <a href="<?=Url::to(['/post'])?>" class="nav-link">Posts</a>
+                            </li>
 <!--                            <li class="nav-item">-->
 <!--                                <a class="nav-link" href="contact.html">-->
 <!--                                    Contact-->

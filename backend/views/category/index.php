@@ -1,29 +1,32 @@
 <?php
 
-use common\models\City;
+use common\models\Category;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\CitySearch */
 
-$this->title = 'Cities';
+/* @var $this yii\web\View */
+/* @var $searchModel backend\models\CategorySearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Categories';
 $this->params['breadcrumbs'][] = $this->title;
 
 $dataProvider = new ActiveDataProvider([
-    'query' => City::find(),
+    'query' => Category::find(),
     'pagination' =>[
         'pageSize' => 3
     ]
 ]);
+
 ?>
-<div class="city-index">
+<div class="category-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create City', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -33,9 +36,9 @@ $dataProvider = new ActiveDataProvider([
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            'format' => 'row',
             'id',
-            'name',
+            'title',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -49,6 +49,18 @@ AppAsset::register($this);
                         <p>Users</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= Url::to(['/post'])?>" class="nav-link">
+                        <i class="nav-icon far fa-circle text-info"></i>
+                        <p>Posts</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= Url::to(['/category'])?>" class="nav-link">
+                        <i class="nav-icon far fa-circle text-info"></i>
+                        <p>Categories</p>
+                    </a>
+                </li>
                     <?php
                     echo '
                                     <li class="nav-item ">'
