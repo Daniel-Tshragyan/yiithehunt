@@ -98,7 +98,10 @@ class CompanySignupForm extends Model
     {
         if (!is_null($this->image) && !empty($this->image)) {
             $random = Yii::$app->security->generateRandomString(12).'.'.$this->image->extension;
-            $this->image->saveAs('@frontend/web/uploads/users/' .$random);
+            $path = Yii::getAlias('@frontend') . "/web/uploads/users";
+            if (\yii\helpers\FileHelper::createDirectory($path, 0775, true)) {
+                $this->image->saveAs($path .'/'.$random);
+            }
             $this->user_company->image = $random;
             $this->user_company->save();
         }

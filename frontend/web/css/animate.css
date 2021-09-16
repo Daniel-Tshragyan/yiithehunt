@@ -3301,3 +3301,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   -webkit-animation-name: zoomOutUp;
   animation-name: zoomOutUp;
 }
+
+.mainPosts .list-view{
+  display: flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  justify-content: space-between;
+}
+.mainPosts .list-view .summary{
+  width:100%;
+}
+.mainPosts .list-view .post{
+  width:35%
+}

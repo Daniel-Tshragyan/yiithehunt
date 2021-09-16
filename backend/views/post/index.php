@@ -1,29 +1,30 @@
 <?php
 
-use common\models\City;
+use common\models\Post;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
-
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\CitySearch */
+/* @var $searchModel backend\models\PostSearch */
 
-$this->title = 'Cities';
+$this->title = 'Posts';
 $this->params['breadcrumbs'][] = $this->title;
-
 $dataProvider = new ActiveDataProvider([
-    'query' => City::find(),
+    'query' => Post::find(),
     'pagination' =>[
         'pageSize' => 3
     ]
 ]);
+
 ?>
-<div class="city-index">
+
+
+<div class="post-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create City', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -35,7 +36,10 @@ $dataProvider = new ActiveDataProvider([
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'name',
+            'image',
+            'title',
+            'content',
+            'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
