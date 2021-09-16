@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 use common\models\CategoryPost;
+use yii\helpers\Url;
+
 /**
  * This is the model class for table "categories".
  *
@@ -58,5 +60,15 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Post::class, ['id' => 'post_id'])
             ->via('categoriesPosts');
+    }
+
+    public function getPostsCount()
+    {
+        return $this->getPosts()->count();
+    }
+
+    public function getViewUrl()
+    {
+        return Url::to(['category/show', 'id' => $this->id]);
     }
 }

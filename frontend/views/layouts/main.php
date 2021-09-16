@@ -85,11 +85,9 @@ AppAsset::register($this);
                             <li class="nav-item">
                                 <a href="<?=Url::to(['/post'])?>" class="nav-link">Posts</a>
                             </li>
-<!--                            <li class="nav-item">-->
-<!--                                <a class="nav-link" href="contact.html">-->
-<!--                                    Contact-->
-<!--                                </a>-->
-<!--                            </li>-->
+                            <li class="nav-item">
+                                <a href="<?=Url::to(['/category'])?>" class="nav-link">Categories</a>
+                            </li>
                             <?php
                                 if (Yii::$app->user->isGuest) {
                                     echo '

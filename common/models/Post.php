@@ -89,6 +89,15 @@ class Post extends \yii\db\ActiveRecord
             ->via('categoriesPosts');
     }
 
+    public function getCategoryIds()
+    {
+        $this->categoryIds = \yii\helpers\ArrayHelper::getColumn(
+            $this->getCategoriesPosts()->asArray()->all(),
+            'category_id'
+        );
+        return $this->categoryIds;
+    }
+
     public function getdropCategory()
     {
         $data = Category::find()->asArray()->all();
@@ -105,8 +114,6 @@ class Post extends \yii\db\ActiveRecord
             if (\yii\helpers\FileHelper::createDirectory($path, 0775, true)) {
                 $this->image->saveAs($path .'/'.$random);
             }
-
-
 
             $this->image = $random;
         }
@@ -130,7 +137,7 @@ class Post extends \yii\db\ActiveRecord
 
     public function getDate()
     {
-        return date('Y-m-d', $this->created_at);
+        return date('d-m-Y', $this->created_at);
     }
 
 }

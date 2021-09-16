@@ -44,7 +44,7 @@ $dataProvider = new ActiveDataProvider([
                 <?php foreach($categories as $category): ?>
                     <li class="nav-item" align="right">
                         <a href="<?=Url::to(['post/', 'category' => $category->title])?>">
-                            <?= $category->title ?>
+                            <?= $category->title.'-'.$category->getPostsCount() ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
