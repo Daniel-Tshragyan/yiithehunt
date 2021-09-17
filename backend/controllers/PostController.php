@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\PostForm;
+use common\models\Category;
 use common\models\CategoryPost;
 use common\models\Post;
 use backend\models\PostSearch;
@@ -56,19 +58,14 @@ class PostController extends AdminController
      */
     public function actionCreate()
     {
-        $model = new Post();
+        $model = new PostForm();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->image = UploadedFile::getInstance($model, 'image');
-                if ($model->upload() && $model->save()) {
-                    foreach ($model->categoryIds as $item) {
-                        $categoryPost = new CategoryPost();
-                        $categoryPost->category_id = $item;
-                        $categoryPost->post_id = $model->id;
-                        $categoryPost->save();
-                    }
-                    return $this->redirect(['view', 'id' => $model->id]);
+                if ($model->upload() && $model->addPost()) {
+                    $model->addCategories();
+                    return $this->redirect(['view', 'id' => $model->newPost->id]);
                 }
             }
         } else {

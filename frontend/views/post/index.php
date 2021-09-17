@@ -25,7 +25,7 @@ $dataProvider = new ActiveDataProvider([
 <div class="container">
 
     <div class="row">
-        <div class="col col-lg-9 d-flex justify-content-between flex-wrap mainPosts">
+        <div class="col col-lg-7 d-flex justify-content-between flex-wrap mainPosts">
             <?php
                 echo ListView::widget([
                     'dataProvider' => $dataProvider,
@@ -33,7 +33,7 @@ $dataProvider = new ActiveDataProvider([
                 ]);
             ?>
         </div>
-        <div class="col col-lg-3">
+        <div class="col col-lg-5">
             <ul>
                 <h6 align="center">Categories</h6>
                 <li class="nav-item" align="right">
@@ -42,10 +42,40 @@ $dataProvider = new ActiveDataProvider([
                     </a>
                 </li>
                 <?php foreach($categories as $category): ?>
-                    <li class="nav-item" align="right">
+                    <li class="nav-item" align="right" style="display:flex;justify-content:space-around">
                         <a href="<?=Url::to(['post/', 'category' => $category->title])?>">
                             <?= $category->title.'-'.$category->getPostsCount() ?>
                         </a>
+                        <?php
+                        if (!Yii::$app->user->isGuest) {
+                            if ($category->isUserSubscribed()) {
+                                echo
+                                    Html::beginForm(['/subscribe/remove'], 'post', ['class' => 'form-inline'])
+                                    .Html::hiddenInput(
+                                        'category',
+                                        $category->id
+                                    ).Html::submitButton(
+                                        'Unsubscribe ',
+                                        ['class' => 'btn btn-danger ', 'style' => 'float:right']
+                                    )
+                                    .Html::endForm();
+                            } else {
+                                echo
+                                    Html::beginForm(['/subscribe/add'], 'post', ['class' => 'form-inline'])
+                                    .Html::hiddenInput(
+                                        'category',
+                                        $category->id
+                                    ).Html::submitButton(
+                                        'Subscribe ',
+                                        ['class' => 'btn btn-success ', 'style' => 'float:right']
+                                    )
+                                    .Html::endForm();
+                            }
+
+
+                        }
+
+                        ?>
                     </li>
                 <?php endforeach; ?>
 

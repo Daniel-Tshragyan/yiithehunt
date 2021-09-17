@@ -101,6 +101,38 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['email' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
+    public function getSubscribes()
+    {
+        return $this->hasMany(Subscribe::class, ['user_id' => 'id']);
+    }
+
+    public function getNotificationsUsers()
+    {
+        return $this->hasMany(NotificationsUsers::class, ['user_id' => 'id']);
+    }
+
+    public function getNotifications()
+    {
+        return $this->hasMany(Notification::class, ['id' => 'notification_id'])
+            ->via('notificationsUsers');
+    }
+    public function getUsersPosts()
+    {
+        return $this->hasMany(UsersPosts::class, ['user_id' => 'id']);
+    }
+
+    public function getPosts()
+    {
+        return $this->hasMany(Post::class, ['id' => 'post_id'])
+            ->via('usersPosts');
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(Category::class, ['id' => 'category_id'])
+            ->via('subscribes');
+    }
+
     /**
      * Finds user by password reset token
      *

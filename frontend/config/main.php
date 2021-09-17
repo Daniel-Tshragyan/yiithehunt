@@ -43,6 +43,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
+                'post/<category:\w+>' => 'post',
             ],
         ],
 

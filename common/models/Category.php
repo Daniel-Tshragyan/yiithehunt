@@ -61,6 +61,20 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(Post::class, ['id' => 'post_id'])
             ->via('categoriesPosts');
     }
+    public function getSubscribes()
+    {
+        return $this->hasMany(Subscribe::class, ['category_id' => 'id']);
+    }
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->via('subscribes');
+    }
+
+    public function isUserSubscribed() {
+        return $this->getUsers()->where(['id' => Yii::$app->user->id])->exists();
+    }
 
     public function getPostsCount()
     {
