@@ -42,7 +42,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'post/show/<id:\d+>' => 'post/show',
+                '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
+                'post/<category:\w+>' => 'post',
             ],
         ],
 

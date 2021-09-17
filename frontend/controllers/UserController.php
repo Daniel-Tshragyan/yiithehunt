@@ -71,4 +71,9 @@ class UserController extends \yii\web\Controller
 
         return $this->goHome();
     }
+    
+    public function actionNotification()
+    {
+        return $this->render('notification/index',['model' => Yii::$app->user->identity->getNotifications()]);
+    }
 }

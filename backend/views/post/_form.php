@@ -39,7 +39,6 @@ use yii\widgets\ActiveForm;
         'pluginOptions' => [
             'tags' => true,
             'tokenSeparators' => [',', ' '],
-            'maximumInputLength' => 10
         ],
     ])->label('Categories');
 

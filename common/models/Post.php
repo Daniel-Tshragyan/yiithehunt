@@ -55,7 +55,6 @@ class Post extends \yii\db\ActiveRecord
             [['image'], 'required'],
             [['title', 'content', 'image'], 'string', 'max' => 255],
             [['content'], 'string'],
-            ['categoryIds', 'required']
         ];
     }
 
@@ -89,29 +88,37 @@ class Post extends \yii\db\ActiveRecord
             ->via('categoriesPosts');
     }
 
+    public function getCategoryIds()
+    {
+        $this->categoryIds = \yii\helpers\ArrayHelper::getColumn(
+            $this->getCategoriesPosts()->asArray()->all(),
+            'category_id'
+        );
+        return $this->categoryIds;
+    }
+
     public function getdropCategory()
     {
         $data = Category::find()->asArray()->all();
         return ArrayHelper::map($data, 'id', 'title');
     }
 
-    public function upload()
+    public function getUsersPosts()
     {
-        
-        if (!is_null($this->image) && !empty($this->image)) {
-            $random = Yii::$app->security->generateRandomString(12).'.'.$this->image->extension;
-            $path = Yii::getAlias('@frontend') . "/web/images/editor";
-
-            if (\yii\helpers\FileHelper::createDirectory($path, 0775, true)) {
-                $this->image->saveAs($path .'/'.$random);
-            }
-
-
-
-            $this->image = $random;
-        }
-        return true;
+        return $this->hasMany(UsersPosts::class, ['post_id' => 'id']);
     }
+
+    public function isUserRead() {
+        return $this->getUsers()->where(['id' => Yii::$app->user->id])->exists();
+    }
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->via('usersPosts');
+    }
+
+
 
     public function getImgUrl()
     {
@@ -130,7 +137,7 @@ class Post extends \yii\db\ActiveRecord
 
     public function getDate()
     {
-        return date('Y-m-d', $this->created_at);
+        return date('d-m-Y', $this->created_at);
     }
 
 }

@@ -85,14 +85,15 @@ AppAsset::register($this);
                             <li class="nav-item">
                                 <a href="<?=Url::to(['/post'])?>" class="nav-link">Posts</a>
                             </li>
-<!--                            <li class="nav-item">-->
-<!--                                <a class="nav-link" href="contact.html">-->
-<!--                                    Contact-->
-<!--                                </a>-->
-<!--                            </li>-->
+                            <li class="nav-item">
+                                <a href="<?=Url::to(['/category'])?>" class="nav-link">Categories</a>
+                            </li>
+
                             <?php
                                 if (Yii::$app->user->isGuest) {
+
                                     echo '
+                                    
                                     <li class="nav-item dropdown">
                                         <a class="nav-link" href="'. Url::to(['site/login']).'">Sign In</a>
                                         <ul class="dropdown-menu">
@@ -102,6 +103,9 @@ AppAsset::register($this);
                                     </li>';
                                 } else {
                                     echo '
+                                    <li class="nav-item">
+                                        <a href="'.Url::to(['user/notification']).'" class="nav-link">Notifications</a>
+                                    </li>
                                     <li class="nav-item dropdown">'
                                         .Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                                      .Html::submitButton(
